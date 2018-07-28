@@ -4,12 +4,10 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,80 +15,52 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import app.tfkproject.amopen.adapter.AdminAdapter;
-import app.tfkproject.amopen.model.ItemAdmin;
-import app.tfkproject.amopen.model.ItemStaffKampus;
+import app.tfkproject.amopen.model.ItemMahasiswa;
 import app.tfkproject.amopen.util.Config;
 import app.tfkproject.amopen.util.Request;
-import app.tfkproject.amopen.util.SessionManager;
 
-public class AdminActivity extends AppCompatActivity {
+public class KompenDetailActivity extends AppCompatActivity {
 
-    List<ItemAdmin> items;
-    AdminAdapter adapter;
-    RecyclerView recyclerView;
-    LinearLayoutManager layoutManager;
+    List<ItemMahasiswa> items;
     private ProgressDialog pDialog;
-    String id_admin;
-    SessionManager session;
-    private static String url = Config.HOST+"list_kompen.php";
+    private static String url = Config.HOST+"kompen_detail.php";
+
+    Button btnUpdate;
+    TextView txtNamaMhs, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang;
+
+    String id, nama_mhs, status, nama_dsn, jabatan, ruangan, pekerjaan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mahasiswa);
+        setContentView(R.layout.activity_kompen_detail);
+        //buat tombol back di ActionBar
+        getSupportActionBar().setTitle("Detail Kompen");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getSupportActionBar().setTitle("Admin");
+        String id_kompen = getIntent().getStringExtra("key_id_kompen");
 
-        session = new SessionManager(AdminActivity.this);
-        //ambil data user
-        HashMap<String, String> user = session.getUserDetails();
-        id_admin = user.get(SessionManager.KEY_ID_USER);
-        String nama = user.get(SessionManager.KEY_NM_USER);
-        Toast.makeText(this, ""+nama, Toast.LENGTH_SHORT).show();
+        new dapatkanData(id_kompen).execute();
 
-        //panggil RecyclerView
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        txtNamaMhs = (TextView) findViewById(R.id.txt_nm_mhs);
+        txtStatus = (TextView) findViewById(R.id.txt_status);
+        txtNamaDsn = (TextView) findViewById(R.id.txt_nm_dsn);
+        txtJabatan = (TextView) findViewById(R.id.txt_jab);
+        txtDesk = (TextView) findViewById(R.id.txt_desk);
+        txtRuang = (TextView) findViewById(R.id.txt_ruang);
 
-        //set LayoutManager
-        layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        items = new ArrayList<>();
-
-        new dapatkanData().execute();
-
-        //set adapter
-        adapter = new AdminAdapter(AdminActivity.this, items);
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
-        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            session.logoutUser();
+        int id_menu = item.getItemId();
+        if(id_menu == android.R.id.home){
             finish();
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -98,11 +68,16 @@ public class AdminActivity extends AppCompatActivity {
 
         //variabel untuk tangkap data
         private int scs = 0;
+        private String id_kompen;
+
+        public dapatkanData(String id_kompen){
+            this.id_kompen = id_kompen;
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(AdminActivity.this);
+            pDialog = new ProgressDialog(KompenDetailActivity.this);
             pDialog.setMessage("Memuat data...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -114,6 +89,7 @@ public class AdminActivity extends AppCompatActivity {
             try{
                 //susun parameter
                 HashMap<String,String> detail = new HashMap<>();
+                detail.put("id_kompen", id_kompen);
 
                 try {
                     //convert this HashMap to encodedUrl to send to php file
@@ -134,11 +110,14 @@ public class AdminActivity extends AppCompatActivity {
                             JSONObject c = products.getJSONObject(i);
 
                             // Storing each json item in variable
-                            String id = c.getString("id_kompen");
-                            String nama = c.getString("nama");
-                            String status = c.getString("status");
+                            id = c.getString("id_kompen");
+                            nama_mhs = c.getString("nm_mhs");
+                            status = c.getString("status");
+                            nama_dsn = c.getString("nm_dsn");
+                            jabatan = c.getString("jabatan");
+                            ruangan = c.getString("ruangan");
+                            pekerjaan = c.getString("deks_job");
 
-                            items.add(new ItemAdmin(id, nama, status));
 
                         }
                     } else {
@@ -159,9 +138,14 @@ public class AdminActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            adapter.notifyDataSetChanged();
             pDialog.dismiss();
 
+            txtNamaMhs.setText(nama_mhs);
+            txtStatus.setText(status);
+            txtNamaDsn.setText(nama_dsn);
+            txtJabatan.setText(jabatan);
+            txtDesk.setText(pekerjaan);
+            txtRuang.setText(ruangan);
         }
 
     }
@@ -182,4 +166,5 @@ public class AdminActivity extends AppCompatActivity {
 
         return result.toString();
     }
+
 }

@@ -1,6 +1,7 @@
 package app.tfkproject.amopen.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import app.tfkproject.amopen.KompenDetailActivity;
 import app.tfkproject.amopen.R;
 import app.tfkproject.amopen.model.ItemAdmin;
 
@@ -42,19 +44,9 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.ViewHolder> 
         holder.btnRekap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Sedang dikerjakan", Toast.LENGTH_SHORT).show();
-                /*Intent intent = new Intent(context, DataDetailActivity.class);
-                intent.putExtra("key_nama", items.get(position).getNama());
-                intent.putExtra("key_tgl_lahir", items.get(position).getTgl_lahir());
-                intent.putExtra("key_jk", items.get(position).getJk());
-                intent.putExtra("key_pddkn", items.get(position).getPddkn());
-                intent.putExtra("key_n_ortu", items.get(position).getN_ortu());
-                intent.putExtra("key_alamat", items.get(position).getAlamat());
-                intent.putExtra("key_tgl_periksa", items.get(position).getTgl_periksa());
-                intent.putExtra("key_tujuan", items.get(position).getTujuan());
-                intent.putExtra("key_kpsp_ke", items.get(position).getKpsp_ke());
-                intent.putExtra("key_hasil", items.get(position).getHasil());
-                context.startActivity(intent);*/
+                Intent intent = new Intent(context, KompenDetailActivity.class);
+                intent.putExtra("key_id_kompen", items.get(position).getId());
+                context.startActivity(intent);
             }
         });
     }

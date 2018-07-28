@@ -24,6 +24,7 @@
         <activity android:name=".InputKompenActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".StaffJobDetailActivity" />
+        <activity android:name=".KompenDetailActivity" />
         <activity
             android:name=".StaffActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
