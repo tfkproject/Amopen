@@ -82,7 +82,7 @@
                 <TextView
                     android:layout_width="85dp"
                     android:layout_height="wrap_content"
-                    android:text="Nama Dosen"
+                    android:text="Nama Staff"
                     android:textSize="14sp"
                     android:padding="4dp"/>
 

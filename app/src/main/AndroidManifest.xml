@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.tfkproject.amopen">
+    package="ta.jurais.amopen">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreenActivity"
+        <activity android:name="ta.jurais.amopen.SplashScreenActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,15 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AdminActivity" />
-        <activity android:name=".MahasiswaActivity" />
-        <activity android:name=".ListJobActivity" />
-        <activity android:name=".InputKompenActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".StaffJobDetailActivity" />
-        <activity android:name=".KompenDetailActivity" />
+        <activity android:name="ta.jurais.amopen.AdminActivity" />
+        <activity android:name="ta.jurais.amopen.MahasiswaActivity" />
+        <activity android:name="ta.jurais.amopen.ListJobActivity" />
+        <activity android:name="ta.jurais.amopen.InputKompenActivity" />
+        <activity android:name="ta.jurais.amopen.LoginActivity" />
+        <activity android:name="ta.jurais.amopen.StaffJobDetailActivity" />
+        <activity android:name="ta.jurais.amopen.KompenDetailActivity" />
         <activity
-            android:name=".StaffActivity"
+            android:name="ta.jurais.amopen.StaffActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

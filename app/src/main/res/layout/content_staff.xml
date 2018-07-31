@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="app.tfkproject.amopen.StaffActivity"
+    tools:context="ta.jurais.amopen.StaffActivity"
     tools:showIn="@layout/activity_staff">
 
     <android.support.v7.widget.RecyclerView
