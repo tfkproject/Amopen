@@ -40,7 +40,7 @@ public class KompenDetailActivity extends AppCompatActivity {
     Button btnUpdate;
     TextView txtNamaMhs, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang, txtSisaJam;
 
-    String id, nama_mhs, status, nama_dsn, jabatan, ruangan, pekerjaan, sisa_jam;
+    String id, nama_mhs, semester, kelas, status, nama_dsn, jabatan, ruangan, pekerjaan, sisa_jam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +127,8 @@ public class KompenDetailActivity extends AppCompatActivity {
                             // Storing each json item in variable
                             id = c.getString("id_mahasiswa");
                             nama_mhs = c.getString("nm_mhs");
+                            semester = c.getString("semester");
+                            kelas = c.getString("kelas");
                             status = c.getString("status");
                             nama_dsn = c.getString("nm_dsn");
                             jabatan = c.getString("jabatan");
@@ -134,7 +136,7 @@ public class KompenDetailActivity extends AppCompatActivity {
                             pekerjaan = c.getString("deks_job");
                             sisa_jam = c.getString("sisa_jam");
 
-                            items.add(new ItemKompenDetail(id, nama_mhs, status, nama_dsn, jabatan, pekerjaan, ruangan, sisa_jam));
+                            items.add(new ItemKompenDetail(id, nama_mhs, semester, kelas, status, nama_dsn, jabatan, pekerjaan, ruangan, sisa_jam));
 
                         }
                     } else {

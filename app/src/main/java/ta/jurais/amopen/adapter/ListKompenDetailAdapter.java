@@ -37,6 +37,8 @@ public class ListKompenDetailAdapter extends RecyclerView.Adapter<ListKompenDeta
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.txtNamaMhs.setText(items.get(position).getNama());
+        holder.txtSmtr.setText(items.get(position).getSemester());
+        holder.txtKelas.setText(items.get(position).getKelas());
         holder.txtStatus.setText(items.get(position).getStatus());
         holder.txtNamaDsn.setText(items.get(position).getDosen());
         holder.txtJabatan.setText(items.get(position).getJabatan());
@@ -53,12 +55,14 @@ public class ListKompenDetailAdapter extends RecyclerView.Adapter<ListKompenDeta
 
     class ViewHolder extends RecyclerView.ViewHolder {
         Button btnAmbil;
-        TextView txtNamaMhs, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang, txtSisaJam;
+        TextView txtNamaMhs, txtSmtr, txtKelas, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang, txtSisaJam;
 
         public ViewHolder(View itemView){
             super(itemView);
 
             txtNamaMhs = (TextView) itemView.findViewById(R.id.txt_nm_mhs);
+            txtSmtr = (TextView) itemView.findViewById(R.id.txt_smt);
+            txtKelas = (TextView) itemView.findViewById(R.id.txt_kls);
             txtStatus = (TextView) itemView.findViewById(R.id.txt_status);
             txtNamaDsn = (TextView) itemView.findViewById(R.id.txt_nm_dsn);
             txtJabatan = (TextView) itemView.findViewById(R.id.txt_jab);

@@ -5,10 +5,12 @@ package ta.jurais.amopen.model;
  */
 
 public class ItemKompenDetail {
-    String id, nama, status, dosen, jabatan, desk, ruang, sisa_jam;
+    String id, nama, semester, kelas, status, dosen, jabatan, desk, ruang, sisa_jam;
 
     public ItemKompenDetail(String id,
                        String nama,
+                       String semester,
+                       String kelas,
                        String status,
                        String dosen,
                        String jabatan,
@@ -17,6 +19,8 @@ public class ItemKompenDetail {
                        String sisa_jam){
         this.id = id;
         this.nama = nama;
+        this.semester = semester;
+        this.kelas = kelas;
         this.status = status;
         this.dosen = dosen;
         this.jabatan = jabatan;
@@ -31,6 +35,14 @@ public class ItemKompenDetail {
 
     public String getNama() {
         return nama;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public String getKelas() {
+        return kelas;
     }
 
     public String getStatus() {
