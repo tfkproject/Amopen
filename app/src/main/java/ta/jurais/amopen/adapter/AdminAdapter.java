@@ -44,7 +44,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, KompenDetailActivity.class);
-                intent.putExtra("key_id_kompen", items.get(position).getId());
+                intent.putExtra("key_id_mhs", items.get(position).getId());
                 context.startActivity(intent);
             }
         });

@@ -1,14 +1,17 @@
 package ta.jurais.amopen;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -42,7 +45,7 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mahasiswa);
+        setContentView(R.layout.activity_admin);
 
         getSupportActionBar().setTitle("Admin");
 
@@ -67,6 +70,15 @@ public class AdminActivity extends AppCompatActivity {
         //set adapter
         adapter = new AdminAdapter(AdminActivity.this, items);
         recyclerView.setAdapter(adapter);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminActivity.this, InputMhsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -133,7 +145,7 @@ public class AdminActivity extends AppCompatActivity {
                             JSONObject c = products.getJSONObject(i);
 
                             // Storing each json item in variable
-                            String id = c.getString("id_kompen");
+                            String id = c.getString("id_mahasiswa");
                             String nama = c.getString("nama");
                             String status = c.getString("status");
 

@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -15,24 +17,30 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ta.jurais.amopen.adapter.ListKompenDetailAdapter;
+import ta.jurais.amopen.model.ItemKompenDetail;
 import ta.jurais.amopen.model.ItemMahasiswa;
 import ta.jurais.amopen.util.Config;
 import ta.jurais.amopen.util.Request;
 
 public class KompenDetailActivity extends AppCompatActivity {
 
-    List<ItemMahasiswa> items;
+    List<ItemKompenDetail> items;
+    ListKompenDetailAdapter adapter;
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
     private ProgressDialog pDialog;
     private static String url = Config.HOST+"kompen_detail.php";
 
     Button btnUpdate;
-    TextView txtNamaMhs, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang;
+    TextView txtNamaMhs, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang, txtSisaJam;
 
-    String id, nama_mhs, status, nama_dsn, jabatan, ruangan, pekerjaan;
+    String id, nama_mhs, status, nama_dsn, jabatan, ruangan, pekerjaan, sisa_jam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +50,23 @@ public class KompenDetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Detail Kompen");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String id_kompen = getIntent().getStringExtra("key_id_kompen");
+        //String id_kompen = getIntent().getStringExtra("key_id_kompen");
+        String id_mhs = getIntent().getStringExtra("key_id_mhs");
 
-        new dapatkanData(id_kompen).execute();
+        //panggil RecyclerView
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        txtNamaMhs = (TextView) findViewById(R.id.txt_nm_mhs);
-        txtStatus = (TextView) findViewById(R.id.txt_status);
-        txtNamaDsn = (TextView) findViewById(R.id.txt_nm_dsn);
-        txtJabatan = (TextView) findViewById(R.id.txt_jab);
-        txtDesk = (TextView) findViewById(R.id.txt_desk);
-        txtRuang = (TextView) findViewById(R.id.txt_ruang);
+        //set LayoutManager
+        layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        items = new ArrayList<>();
+
+        new dapatkanData(id_mhs).execute();
+
+        //set adapter
+        adapter = new ListKompenDetailAdapter(KompenDetailActivity.this, items);
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -68,10 +83,10 @@ public class KompenDetailActivity extends AppCompatActivity {
 
         //variabel untuk tangkap data
         private int scs = 0;
-        private String id_kompen;
+        private String id_mahasiswa;
 
-        public dapatkanData(String id_kompen){
-            this.id_kompen = id_kompen;
+        public dapatkanData(String id_mahasiswa){
+            this.id_mahasiswa = id_mahasiswa;
         }
 
         @Override
@@ -89,7 +104,7 @@ public class KompenDetailActivity extends AppCompatActivity {
             try{
                 //susun parameter
                 HashMap<String,String> detail = new HashMap<>();
-                detail.put("id_kompen", id_kompen);
+                detail.put("id_mahasiswa", id_mahasiswa);
 
                 try {
                     //convert this HashMap to encodedUrl to send to php file
@@ -110,14 +125,16 @@ public class KompenDetailActivity extends AppCompatActivity {
                             JSONObject c = products.getJSONObject(i);
 
                             // Storing each json item in variable
-                            id = c.getString("id_kompen");
+                            id = c.getString("id_mahasiswa");
                             nama_mhs = c.getString("nm_mhs");
                             status = c.getString("status");
                             nama_dsn = c.getString("nm_dsn");
                             jabatan = c.getString("jabatan");
                             ruangan = c.getString("ruangan");
                             pekerjaan = c.getString("deks_job");
+                            sisa_jam = c.getString("sisa_jam");
 
+                            items.add(new ItemKompenDetail(id, nama_mhs, status, nama_dsn, jabatan, pekerjaan, ruangan, sisa_jam));
 
                         }
                     } else {
@@ -138,14 +155,8 @@ public class KompenDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            adapter.notifyDataSetChanged();
             pDialog.dismiss();
-
-            txtNamaMhs.setText(nama_mhs);
-            txtStatus.setText(status);
-            txtNamaDsn.setText(nama_dsn);
-            txtJabatan.setText(jabatan);
-            txtDesk.setText(pekerjaan);
-            txtRuang.setText(ruangan);
         }
 
     }

@@ -22,6 +22,7 @@
         <activity android:name="ta.jurais.amopen.MahasiswaActivity" />
         <activity android:name="ta.jurais.amopen.ListJobActivity" />
         <activity android:name="ta.jurais.amopen.InputKompenActivity" />
+        <activity android:name="ta.jurais.amopen.InputMhsActivity" />
         <activity android:name="ta.jurais.amopen.LoginActivity" />
         <activity android:name="ta.jurais.amopen.StaffJobDetailActivity" />
         <activity android:name="ta.jurais.amopen.KompenDetailActivity" />

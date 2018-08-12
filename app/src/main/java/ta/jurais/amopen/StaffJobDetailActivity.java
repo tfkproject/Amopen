@@ -1,5 +1,6 @@
 package ta.jurais.amopen;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +35,9 @@ public class StaffJobDetailActivity extends AppCompatActivity {
     private static String url_update = Config.HOST+"update_status_job.php";
 
     Button btnUpdate;
-    TextView txtNama, txtDesk, txtLabor, txtStatus;
+    TextView txtNama, txtDesk, txtLabor, txtStatus, txtJumKompen, txtSisaJam;
 
-    String id, nama, ruangan, status, pekerjaan;
+    String id, nama, ruangan, status, pekerjaan, jum_kompen, sisa_jam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class StaffJobDetailActivity extends AppCompatActivity {
         txtDesk = (TextView) findViewById(R.id.txt_desk);
         txtLabor = (TextView) findViewById(R.id.txt_ruang);
         txtStatus = (TextView) findViewById(R.id.txt_status);
+        txtJumKompen = (TextView) findViewById(R.id.txt_jum_kompen);
+        txtSisaJam = (TextView) findViewById(R.id.txt_sisa_jam);
         btnUpdate = (Button) findViewById(R.id.btn_update);
 
     }
@@ -117,6 +121,8 @@ public class StaffJobDetailActivity extends AppCompatActivity {
                             ruangan = c.getString("ruangan");
                             status = c.getString("status");
                             pekerjaan = c.getString("deks_job");
+                            jum_kompen = c.getString("jum_kompen");
+                            sisa_jam = c.getString("sisa_jam");
 
 
                         }
@@ -144,10 +150,12 @@ public class StaffJobDetailActivity extends AppCompatActivity {
             txtDesk.setText(pekerjaan);
             txtLabor.setText(ruangan);
             txtStatus.setText(status);
+            txtJumKompen.setText(jum_kompen);
+            txtSisaJam.setText(sisa_jam);
             btnUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new updateData(id).execute();
+                    formSetStatus(id, sisa_jam);
                 }
             });
         }
@@ -159,10 +167,12 @@ public class StaffJobDetailActivity extends AppCompatActivity {
         //variabel untuk tangkap data
         private int scs = 0;
         private String psn;
-        private String id_kompen;
+        private String id_kompen, status, sisa_jam;
 
-        public updateData(String id_kompen){
+        public updateData(String id_kompen, String status, String sisa_jam){
             this.id_kompen = id_kompen;
+            this.status = status;
+            this.sisa_jam = sisa_jam;
         }
 
         @Override
@@ -181,6 +191,8 @@ public class StaffJobDetailActivity extends AppCompatActivity {
                 //susun parameter
                 HashMap<String,String> detail = new HashMap<>();
                 detail.put("id_kompen", id_kompen);
+                detail.put("status", status);
+                detail.put("sisa_jam", sisa_jam);
 
                 try {
                     //convert this HashMap to encodedUrl to send to php file
@@ -223,6 +235,39 @@ public class StaffJobDetailActivity extends AppCompatActivity {
             }
 
         }
+
+    }
+
+    private void formSetStatus(final String id_kompen, final String sisa_jam){
+        //panggil layout
+        final Dialog dialog = new Dialog(StaffJobDetailActivity.this);
+        dialog.setContentView(R.layout.dialog_set_status);
+        dialog.setTitle("Set Status Kompen");
+
+        //set komponen layout
+        final EditText edtJam = (EditText) dialog.findViewById(R.id.edit_jam);
+        Button btnSetJam = (Button) dialog.findViewById(R.id.btn_set_jam);
+        Button btnSelesai = (Button) dialog.findViewById(R.id.btn_selesai);
+
+        edtJam.setText(sisa_jam);
+
+        btnSetJam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sisa_jam = edtJam.getText().toString();
+                new updateData(id_kompen, "Sedang dikerjakan", sisa_jam).execute();
+                dialog.dismiss();
+            }
+        });
+        btnSelesai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new updateData(id_kompen, "Selesai", "0").execute();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
 
     }
 
