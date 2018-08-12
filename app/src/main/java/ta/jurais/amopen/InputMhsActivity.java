@@ -24,7 +24,7 @@ import ta.jurais.amopen.util.Request;
 
 public class InputMhsActivity extends AppCompatActivity {
 
-    EditText edtNim, edtNama, edtEmail, edtPass, edtJumKompen;
+    EditText edtNim, edtNama, edtSmstr, edtKelas, edtEmail, edtPass, edtJumKompen;
     Button btnSubmit;
 
     private ProgressDialog pDialog;
@@ -41,6 +41,8 @@ public class InputMhsActivity extends AppCompatActivity {
 
         edtNim = (EditText) findViewById(R.id.edt_nim);
         edtNama = (EditText) findViewById(R.id.edt_nama);
+        edtSmstr = (EditText) findViewById(R.id.edt_semester);
+        edtKelas = (EditText) findViewById(R.id.edt_kelas);
         edtEmail = (EditText) findViewById(R.id.edt_email);
         edtPass = (EditText) findViewById(R.id.edt_pass);
         edtJumKompen = (EditText) findViewById(R.id.edt_jum_kompen);
@@ -52,11 +54,13 @@ public class InputMhsActivity extends AppCompatActivity {
 
                 String nim = edtNim.getText().toString();
                 String nama = edtNama.getText().toString();
+                String semester = edtSmstr.getText().toString();
+                String kelas = edtKelas.getText().toString();
                 String email = edtEmail.getText().toString();
                 String pass = edtPass.getText().toString();
                 String sisa_jam = edtJumKompen.getText().toString();
 
-                new postData(nim, nama, email, pass, sisa_jam).execute();
+                new postData(nim, nama, semester, kelas, email, pass, sisa_jam).execute();
             }
         });
 
@@ -76,15 +80,19 @@ public class InputMhsActivity extends AppCompatActivity {
         //variabel untuk tangkap data
         private int scs = 0;
         private String psn;
-        private String nim, nama, email, pass, sisa_jam;
+        private String nim, nama, semester, kelas, email, pass, sisa_jam;
 
         public postData(String nim,
                         String nama,
+                        String semester,
+                        String kelas,
                         String email,
                         String pass,
                         String sisa_jam){
             this.nim = nim;
             this.nama = nama;
+            this.semester = semester;
+            this.kelas = kelas;
             this.email = email;
             this.pass = pass;
             this.sisa_jam = sisa_jam;
@@ -107,6 +115,8 @@ public class InputMhsActivity extends AppCompatActivity {
                 HashMap<String,String> detail = new HashMap<>();
                 detail.put("nim", nim);
                 detail.put("nama", nama);
+                detail.put("semester", semester);
+                detail.put("kelas", kelas);
                 detail.put("email", email);
                 detail.put("pass", pass);
                 detail.put("jum_kompen", sisa_jam);
