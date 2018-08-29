@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -42,6 +43,7 @@ public class StaffActivity extends AppCompatActivity {
     String id_staff_kampus;
     SessionManager session;
     private static String url = Config.HOST+"list_kompen_stf.php";
+    TextView txtNotif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class StaffActivity extends AppCompatActivity {
         id_staff_kampus = user.get(SessionManager.KEY_ID_USER);
         String nama = user.get(SessionManager.KEY_NM_USER);
         Toast.makeText(this, ""+nama, Toast.LENGTH_SHORT).show();
+
+        txtNotif = (TextView) findViewById(R.id.txt_notif);
 
         //panggil RecyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -87,7 +91,7 @@ public class StaffActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -103,6 +107,11 @@ public class StaffActivity extends AppCompatActivity {
             session.logoutUser();
             finish();
             return true;
+        }
+
+        if (id == R.id.action_refresh) {
+            items.clear();
+            new dapatkanData(id_staff_kampus).execute();
         }
 
         return super.onOptionsItemSelected(item);
@@ -182,7 +191,11 @@ public class StaffActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             adapter.notifyDataSetChanged();
             pDialog.dismiss();
-
+            if (scs == 1) {
+                txtNotif.setVisibility(View.GONE);
+            } else {
+                txtNotif.setVisibility(View.VISIBLE);
+            }
         }
 
     }

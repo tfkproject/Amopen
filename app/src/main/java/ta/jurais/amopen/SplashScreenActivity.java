@@ -64,6 +64,11 @@ public class SplashScreenActivity extends AppCompatActivity {
                         // tutup activity
                         finish();
                         break; // optional
+                    case 4 :
+                        startActivity(new Intent(SplashScreenActivity.this, DosenActivity.class));
+                        // tutup activity
+                        finish();
+                        break; // optional
                     default : // Optional
                         //.. tidak ada
                 }

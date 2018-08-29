@@ -44,6 +44,7 @@ public class ListKompenDetailAdapter extends RecyclerView.Adapter<ListKompenDeta
         holder.txtJabatan.setText(items.get(position).getJabatan());
         holder.txtDesk.setText(items.get(position).getDesk());
         holder.txtRuang.setText(items.get(position).getRuang());
+        holder.txtJumKompen.setText(items.get(position).getJum_kompen());
         holder.txtSisaJam.setText(items.get(position).getSisa_jam());
 
     }
@@ -54,8 +55,8 @@ public class ListKompenDetailAdapter extends RecyclerView.Adapter<ListKompenDeta
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        Button btnAmbil;
-        TextView txtNamaMhs, txtSmtr, txtKelas, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang, txtSisaJam;
+
+        TextView txtNamaMhs, txtSmtr, txtKelas, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang, txtJumKompen, txtSisaJam;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -68,6 +69,7 @@ public class ListKompenDetailAdapter extends RecyclerView.Adapter<ListKompenDeta
             txtJabatan = (TextView) itemView.findViewById(R.id.txt_jab);
             txtDesk = (TextView) itemView.findViewById(R.id.txt_desk);
             txtRuang = (TextView) itemView.findViewById(R.id.txt_ruang);
+            txtJumKompen = (TextView) itemView.findViewById(R.id.txt_jum_kompen);
             txtSisaJam = (TextView) itemView.findViewById(R.id.txt_sisa_jam);
 
         }

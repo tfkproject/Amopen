@@ -1,7 +1,6 @@
 package ta.jurais.amopen;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,35 +24,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ta.jurais.amopen.adapter.MahasiswaAdapter;
-import ta.jurais.amopen.model.ItemStaffKampus;
+import ta.jurais.amopen.adapter.AdminAdapter;
+import ta.jurais.amopen.model.ItemAdmin;
 import ta.jurais.amopen.util.Config;
 import ta.jurais.amopen.util.Request;
 import ta.jurais.amopen.util.SessionManager;
 
-public class MahasiswaActivity extends AppCompatActivity {
+public class DosenActivity extends AppCompatActivity {
 
-    List<ItemStaffKampus> items;
-    MahasiswaAdapter adapter;
+    List<ItemAdmin> items;
+    AdminAdapter adapter;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     private ProgressDialog pDialog;
-    String id_mahasiswa;
+    String id_admin;
     SessionManager session;
-    private static String url = Config.HOST+"list_job.php";
+    private static String url = Config.HOST+"list_kompen.php";
     TextView txtNotif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mahasiswa);
+        setContentView(R.layout.activity_dosen);
 
-        getSupportActionBar().setTitle("Open Job Kompensasi");
+        getSupportActionBar().setTitle("Dosen");
 
-        session = new SessionManager(MahasiswaActivity.this);
+        session = new SessionManager(DosenActivity.this);
         //ambil data user
         HashMap<String, String> user = session.getUserDetails();
-        id_mahasiswa = user.get(SessionManager.KEY_ID_USER);
+        id_admin = user.get(SessionManager.KEY_ID_USER);
         String nama = user.get(SessionManager.KEY_NM_USER);
         Toast.makeText(this, ""+nama, Toast.LENGTH_SHORT).show();
 
@@ -71,16 +70,9 @@ public class MahasiswaActivity extends AppCompatActivity {
         new dapatkanData().execute();
 
         //set adapter
-        adapter = new MahasiswaAdapter(MahasiswaActivity.this, items, new MahasiswaAdapter.AdapterListener() {
-            @Override
-            public void onSelected(int position, String id_staff_kampus) {
-                Intent intent = new Intent(MahasiswaActivity.this, ListJobActivity.class);
-                intent.putExtra("key_id_staff_kampus", id_staff_kampus);
-                intent.putExtra("key_id_mahasiswa", id_mahasiswa);
-                startActivity(intent);
-            }
-        });
+        adapter = new AdminAdapter(DosenActivity.this, items);
         recyclerView.setAdapter(adapter);
+
     }
 
     @Override
@@ -120,7 +112,7 @@ public class MahasiswaActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(MahasiswaActivity.this);
+            pDialog = new ProgressDialog(DosenActivity.this);
             pDialog.setMessage("Memuat data...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -152,12 +144,11 @@ public class MahasiswaActivity extends AppCompatActivity {
                             JSONObject c = products.getJSONObject(i);
 
                             // Storing each json item in variable
-                            String id = c.getString("id_staff_kampus");
+                            String id = c.getString("id_mahasiswa");
                             String nama = c.getString("nama");
-                            String jabatan = c.getString("jabatan");
+                            String status = c.getString("status");
 
-
-                            items.add(new ItemStaffKampus(id, nama, jabatan));
+                            items.add(new ItemAdmin(id, nama, status));
 
                         }
                     } else {

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -41,6 +42,7 @@ public class AdminActivity extends AppCompatActivity {
     String id_admin;
     SessionManager session;
     private static String url = Config.HOST+"list_kompen.php";
+    TextView txtNotif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,8 @@ public class AdminActivity extends AppCompatActivity {
         id_admin = user.get(SessionManager.KEY_ID_USER);
         String nama = user.get(SessionManager.KEY_NM_USER);
         Toast.makeText(this, ""+nama, Toast.LENGTH_SHORT).show();
+
+        txtNotif = (TextView) findViewById(R.id.txt_notif);
 
         //panggil RecyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -84,7 +88,7 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -100,6 +104,11 @@ public class AdminActivity extends AppCompatActivity {
             session.logoutUser();
             finish();
             return true;
+        }
+
+        if (id == R.id.action_refresh) {
+            items.clear();
+            new dapatkanData().execute();
         }
 
         return super.onOptionsItemSelected(item);
@@ -172,7 +181,11 @@ public class AdminActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             adapter.notifyDataSetChanged();
             pDialog.dismiss();
-
+            if (scs == 1) {
+                txtNotif.setVisibility(View.GONE);
+            } else {
+                txtNotif.setVisibility(View.VISIBLE);
+            }
         }
 
     }

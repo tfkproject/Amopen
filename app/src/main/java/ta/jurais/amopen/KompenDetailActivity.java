@@ -40,7 +40,7 @@ public class KompenDetailActivity extends AppCompatActivity {
     Button btnUpdate;
     TextView txtNamaMhs, txtStatus, txtNamaDsn, txtJabatan, txtDesk, txtRuang, txtSisaJam;
 
-    String id, nama_mhs, semester, kelas, status, nama_dsn, jabatan, ruangan, pekerjaan, sisa_jam;
+    String id, nama_mhs, semester, kelas, status, nama_dsn, jabatan, ruangan, pekerjaan, jum_kompen, sisa_jam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +134,10 @@ public class KompenDetailActivity extends AppCompatActivity {
                             jabatan = c.getString("jabatan");
                             ruangan = c.getString("ruangan");
                             pekerjaan = c.getString("deks_job");
+                            jum_kompen = c.getString("jum_kompen");
                             sisa_jam = c.getString("sisa_jam");
 
-                            items.add(new ItemKompenDetail(id, nama_mhs, semester, kelas, status, nama_dsn, jabatan, pekerjaan, ruangan, sisa_jam));
+                            items.add(new ItemKompenDetail(id, nama_mhs, semester, kelas, status, nama_dsn, jabatan, pekerjaan, ruangan, jum_kompen, sisa_jam));
 
                         }
                     } else {

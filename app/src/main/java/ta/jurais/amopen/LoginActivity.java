@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private static String url_adm = Config.HOST+"login_adm.php";
     private static String url_mhs = Config.HOST+"login_mhs.php";
     private static String url_stf = Config.HOST+"login_stf.php";
+    private static String url_dsn = Config.HOST+"login_dsn.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         categories.add("Admin");
         categories.add("Mahasiswa");
         categories.add("Staff Kampus");
+        categories.add("Dosen");
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
@@ -94,6 +96,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                     case 3 :
                         //startActivity(new Intent(LoginActivity.this, StaffActivity.class));
                         new loginStaff(email, pass).execute();
+                        break; // optional
+                    case 4 :
+                        //startActivity(new Intent(LoginActivity.this, StaffActivity.class));
+                        new loginDosen(email, pass).execute();
                         break; // optional
                     default : // Optional
                         Toast.makeText(LoginActivity.this, "Pilih login anda", Toast.LENGTH_SHORT).show();
@@ -376,6 +382,96 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             if(scs == 1){
                 finish();
                 Intent intent = new Intent(LoginActivity.this, StaffActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Toast.makeText(LoginActivity.this, psn, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    private class loginDosen extends AsyncTask<Void,Void,String> {
+
+        //variabel untuk tangkap data
+        private int scs = 0;
+        private String psn;
+        private String email, password;
+
+        public loginDosen(String email, String password){
+            this.email = email;
+            this.password = password;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(LoginActivity.this);
+            pDialog.setMessage("Loading...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        protected String doInBackground(Void... params) {
+
+            try{
+                //susun parameter
+                HashMap<String,String> detail = new HashMap<>();
+                detail.put("email", email);
+                detail.put("pass", password);
+
+                try {
+                    //convert this HashMap to encodedUrl to send to php file
+                    String dataToSend = hashMapToUrl(detail);
+                    //make a Http request and send data to php file
+                    String response = Request.post(url_dsn, dataToSend);
+
+                    //dapatkan respon
+                    Log.e("Email", email);
+                    Log.e("Pass", password);
+                    Log.e("Url", url_dsn);
+                    Log.e("Respon Stf", response);
+
+                    JSONObject ob = new JSONObject(response);
+                    scs = ob.getInt("success");
+
+                    if (scs == 1) {
+                        JSONArray products = ob.getJSONArray("field");
+
+                        for (int i = 0; i < products.length(); i++) {
+                            JSONObject c = products.getJSONObject(i);
+
+                            // Storing each json item in variable
+                            String id_user = c.getString("id_staff_kampus");
+                            String nama = c.getString("nama");
+                            /*String email = c.getString("email");*/
+
+                            //buat sesi login
+                            session.createLoginSession("4", id_user, nama);
+                        }
+                    } else {
+                        // no data found
+                        psn = ob.getString("message");
+                    }
+
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            pDialog.dismiss();
+            if(scs == 1){
+                finish();
+                Intent intent = new Intent(LoginActivity.this, DosenActivity.class);
                 startActivity(intent);
             }
             else{

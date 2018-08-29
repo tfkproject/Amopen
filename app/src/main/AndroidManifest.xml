@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name="ta.jurais.amopen.AdminActivity" />
+        <activity android:name="ta.jurais.amopen.DosenActivity" />
         <activity android:name="ta.jurais.amopen.MahasiswaActivity" />
         <activity android:name="ta.jurais.amopen.ListJobActivity" />
         <activity android:name="ta.jurais.amopen.InputKompenActivity" />
